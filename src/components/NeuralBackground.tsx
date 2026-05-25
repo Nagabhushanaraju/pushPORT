@@ -10,6 +10,50 @@ interface Node {
   baseY: number;
 }
 
+function drawConnection(
+  ctx: CanvasRenderingContext2D,
+  nodeA: Node,
+  nodeB: Node,
+  dist: number,
+  time: number,
+  i: number,
+  j: number
+) {
+  const opacity = (1 - dist / 140) * 0.15;
+
+  // Gradient line
+  const gradient = ctx.createLinearGradient(nodeA.x, nodeA.y, nodeB.x, nodeB.y);
+  const hue = (nodeA.x + nodeA.y) * 0.1 + time * 20;
+
+  if (hue % 200 < 100) {
+    gradient.addColorStop(0, `hsla(270, 80%, 65%, ${opacity})`);
+    gradient.addColorStop(0.5, `hsla(300, 80%, 65%, ${opacity * 1.2})`);
+    gradient.addColorStop(1, `hsla(190, 80%, 65%, ${opacity})`);
+  } else {
+    gradient.addColorStop(0, `hsla(260, 70%, 60%, ${opacity})`);
+    gradient.addColorStop(1, `hsla(280, 70%, 65%, ${opacity})`);
+  }
+
+  ctx.strokeStyle = gradient;
+  ctx.beginPath();
+  ctx.moveTo(nodeA.x, nodeA.y);
+
+  // Curved connection for neural feel
+  const mx = (nodeA.x + nodeB.x) / 2;
+  const my = (nodeA.y + nodeB.y) / 2;
+  const offset = Math.sin(time * 2 + i + j) * 5;
+  ctx.quadraticCurveTo(mx + offset, my - offset, nodeB.x, nodeB.y);
+  ctx.stroke();
+
+  // Pulse on connection
+  if (dist < 80 && Math.random() > 0.97) {
+    ctx.beginPath();
+    ctx.arc(mx, my, 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${270 + (i % 60)}, 80%, 70%, ${opacity * 3})`;
+    ctx.fill();
+  }
+}
+
 export default function NeuralBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0, active: false });
@@ -122,39 +166,7 @@ export default function NeuralBackground() {
           const dist = Math.sqrt(dx * dx + dy * dy);
           
           if (dist < 140) {
-            const opacity = (1 - dist / 140) * 0.15;
-            
-            // Gradient line
-            const gradient = ctx.createLinearGradient(nodeA.x, nodeA.y, nodeB.x, nodeB.y);
-            const hue = (nodeA.x + nodeA.y) * 0.1 + time * 20;
-            
-            if (hue % 200 < 100) {
-              gradient.addColorStop(0, `hsla(270, 80%, 65%, ${opacity})`);
-              gradient.addColorStop(0.5, `hsla(300, 80%, 65%, ${opacity * 1.2})`);
-              gradient.addColorStop(1, `hsla(190, 80%, 65%, ${opacity})`);
-            } else {
-              gradient.addColorStop(0, `hsla(260, 70%, 60%, ${opacity})`);
-              gradient.addColorStop(1, `hsla(280, 70%, 65%, ${opacity})`);
-            }
-            
-            ctx.strokeStyle = gradient;
-            ctx.beginPath();
-            ctx.moveTo(nodeA.x, nodeA.y);
-            
-            // Curved connection for neural feel
-            const mx = (nodeA.x + nodeB.x) / 2;
-            const my = (nodeA.y + nodeB.y) / 2;
-            const offset = Math.sin(time * 2 + i + j) * 5;
-            ctx.quadraticCurveTo(mx + offset, my - offset, nodeB.x, nodeB.y);
-            ctx.stroke();
-
-            // Pulse on connection
-            if (dist < 80 && Math.random() > 0.97) {
-              ctx.beginPath();
-              ctx.arc(mx, my, 1.5, 0, Math.PI * 2);
-              ctx.fillStyle = `hsla(${270 + (i % 60)}, 80%, 70%, ${opacity * 3})`;
-              ctx.fill();
-            }
+            drawConnection(ctx, nodeA, nodeB, dist, time, i, j);
           }
         }
       }
