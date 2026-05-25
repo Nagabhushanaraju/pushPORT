@@ -139,36 +139,34 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-[#050507] text-white antialiased selection:bg-violet-500/30 selection:text-violet-200">
-        <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Fraunces:opsz,wght@9..144,300..700&display=swap');
-          html { scrollbar-width: thin; scrollbar-color: #27272a transparent; }
-          body { font-family: 'Instrument Sans', system-ui, -apple-system, sans-serif; font-feature-settings: 'ss01' on, 'cv01' on; }
-          h1, h2, h3 { font-family: 'Instrument Sans', system-ui, sans-serif; letter-spacing: -0.02em; }
-        `}</style>
-        <NeuralBackground />
-        <Nav />
-        <AppRoutes />
-        
-        {/* Footer */}
-        <footer className="relative z-10 border-t border-white/[0.06] bg-[#050507]">
-          <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center">
-                <span className="text-[12px] font-bold">AE</span>
-              </div>
-              <span className="text-[13px] text-white/50">© 2024 Alex Evans — Design Engineer</span>
+    <div className="min-h-screen bg-[#050507] text-white antialiased selection:bg-violet-500/30 selection:text-violet-200">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Fraunces:opsz,wght@9..144,300..700&display=swap');
+        html { scrollbar-width: thin; scrollbar-color: #27272a transparent; }
+        body { font-family: 'Instrument Sans', system-ui, -apple-system, sans-serif; font-feature-settings: 'ss01' on, 'cv01' on; }
+        h1, h2, h3 { font-family: 'Instrument Sans', system-ui, sans-serif; letter-spacing: -0.02em; }
+      `}</style>
+      <NeuralBackground />
+      <Nav />
+      <AppRoutes />
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-white/[0.06] bg-[#050507]">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center">
+              <span className="text-[12px] font-bold">AE</span>
             </div>
-            <div className="flex items-center gap-6 text-[13px] text-white/50">
-              <a href="#" className="hover:text-white transition-colors">Twitter</a>
-              <a href="#" className="hover:text-white transition-colors">GitHub</a>
-              <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-              <a href="#" className="hover:text-white transition-colors">Email</a>
-            </div>
+            <span className="text-[13px] text-white/50">© 2024 Alex Evans — Design Engineer</span>
           </div>
-        </footer>
-      </div>
-    </BrowserRouter>
+          <div className="flex items-center gap-6 text-[13px] text-white/50">
+            <a href="#" className="hover:text-white transition-colors">Twitter</a>
+            <a href="#" className="hover:text-white transition-colors">GitHub</a>
+            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+            <a href="#" className="hover:text-white transition-colors">Email</a>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
