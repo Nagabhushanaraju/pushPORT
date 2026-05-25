@@ -119,9 +119,10 @@ export default function NeuralBackground() {
           const nodeB = nodes[j];
           const dx = nodeA.x - nodeB.x;
           const dy = nodeA.y - nodeB.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
           
-          if (dist < 140) {
+          if (distSq < 19600) { // 140 * 140
+            const dist = Math.sqrt(distSq);
             const opacity = (1 - dist / 140) * 0.15;
             
             // Gradient line
