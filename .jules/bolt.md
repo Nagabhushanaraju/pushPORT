@@ -1,0 +1,3 @@
+## 2025-03-02 - Fast Bounding Box Checks for Canvas O(N²) Operations
+**Learning:** Performing `Math.sqrt()` extensively within a requestAnimationFrame loop that iterates over O(N²) comparisons (e.g. comparing every node to every other node in a canvas background) is a significant and unnecessary CPU drain when most of these nodes are far apart.
+**Action:** When implementing spatial distance calculations on the frontend (like the canvas node connections in `NeuralBackground.tsx`), heavily optimize by first applying fast bounding box checks (using `Math.abs()` to avoid calculations on distant nodes) and squared distance comparisons (e.g. `distSq < 140 * 140`) to discard distant elements before executing the expensive `Math.sqrt()` operation.
