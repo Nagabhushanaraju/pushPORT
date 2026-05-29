@@ -133,15 +133,19 @@ export default function NeuralBackground() {
         node.vx += (node.baseX - node.x) * 0.001;
         node.vy += (node.baseY - node.y) * 0.001;
         
-        // Mouse interaction
+        // Mouse interaction (Optimized with bounding box and squared distance check)
         if (mouse.active) {
           const dx = mouse.x - node.x;
           const dy = mouse.y - node.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 200) {
-            const force = (200 - dist) / 200;
-            node.vx -= (dx / dist) * force * 0.5;
-            node.vy -= (dy / dist) * force * 0.5;
+          // Quick bounding box check before expensive calculations
+          if (Math.abs(dx) < 200 && Math.abs(dy) < 200) {
+            const distSq = dx * dx + dy * dy;
+            if (distSq < 40000) { // 200 * 200 = 40000
+              const dist = Math.sqrt(distSq);
+              const force = (200 - dist) / 200;
+              node.vx -= (dx / dist) * force * 0.5;
+              node.vy -= (dy / dist) * force * 0.5;
+            }
           }
         }
 
@@ -154,7 +158,7 @@ export default function NeuralBackground() {
         if (node.y < 0 || node.y > window.innerHeight) node.vy *= -1;
       });
 
-      // Draw connections
+      // Draw connections (Optimized O(N^2) loop with bounding box and distSq)
       ctx.lineWidth = 0.5;
       for (let i = 0; i < nodes.length; i++) {
         const nodeA = nodes[i];
@@ -163,10 +167,14 @@ export default function NeuralBackground() {
           const nodeB = nodes[j];
           const dx = nodeA.x - nodeB.x;
           const dy = nodeA.y - nodeB.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
           
-          if (dist < 140) {
-            drawConnection(ctx, nodeA, nodeB, dist, time, i, j);
+          // Fast bounding box check
+          if (Math.abs(dx) < 140 && Math.abs(dy) < 140) {
+            const distSq = dx * dx + dy * dy;
+            if (distSq < 19600) { // 140 * 140 = 19600
+              const dist = Math.sqrt(distSq); // Only calculate sqrt if needed for drawing
+              drawConnection(ctx, nodeA, nodeB, dist, time, i, j);
+            }
           }
         }
       }
