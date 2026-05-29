@@ -1,0 +1,3 @@
+## 2025-02-28 - [Canvas Animation Distance Calculations]
+**Learning:** For 2D canvas animations performing O(N^2) spatial/distance calculations, utilizing expensive operations like `Math.sqrt()` inside tight inner loops can become a performance bottleneck causing dropped frames, especially with a large number of nodes.
+**Action:** Heavily optimize by applying fast bounding box checks (`Math.abs(dx) < threshold && Math.abs(dy) < threshold`) and squared distance checks (`dx * dx + dy * dy < thresholdSq`) before performing operations on interacting nodes. Only use `Math.sqrt()` if the actual distance value is needed downstream.
