@@ -137,11 +137,16 @@ export default function NeuralBackground() {
         if (mouse.active) {
           const dx = mouse.x - node.x;
           const dy = mouse.y - node.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 200) {
-            const force = (200 - dist) / 200;
-            node.vx -= (dx / dist) * force * 0.5;
-            node.vy -= (dy / dist) * force * 0.5;
+
+          // Fast bounding box and squared distance check before expensive Math.sqrt
+          if (Math.abs(dx) < 200 && Math.abs(dy) < 200) {
+            const distSq = dx * dx + dy * dy;
+            if (distSq < 40000) { // 200 * 200
+              const dist = Math.sqrt(distSq);
+              const force = (200 - dist) / 200;
+              node.vx -= (dx / dist) * force * 0.5;
+              node.vy -= (dy / dist) * force * 0.5;
+            }
           }
         }
 
@@ -162,10 +167,17 @@ export default function NeuralBackground() {
         for (let j = i + 1; j < nodes.length; j++) {
           const nodeB = nodes[j];
           const dx = nodeA.x - nodeB.x;
+
+          // Fast bounding box check
+          if (Math.abs(dx) >= 140) continue;
+
           const dy = nodeA.y - nodeB.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (Math.abs(dy) >= 140) continue;
           
-          if (dist < 140) {
+          const distSq = dx * dx + dy * dy;
+          // Squared distance check before expensive Math.sqrt
+          if (distSq < 19600) { // 140 * 140
+            const dist = Math.sqrt(distSq);
             drawConnection(ctx, nodeA, nodeB, dist, time, i, j);
           }
         }
