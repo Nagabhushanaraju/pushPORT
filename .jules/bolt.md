@@ -1,0 +1,3 @@
+## 2025-02-28 - Fast distance calculations in Canvas Animations
+**Learning:** In React components that render dense 2D canvas animations with O(N^2) spatial interactions (like `NeuralBackground.tsx`), using `Math.sqrt()` to calculate distance between points for all possible pairs severely degrades performance.
+**Action:** Apply fast bounding box checks (`Math.abs(dx) < threshold`) and calculate the squared distance (`dx * dx + dy * dy < thresholdSq`) to rapidly eliminate pairs that are out of bounds before calling `Math.sqrt()` for the final visual calculations.
